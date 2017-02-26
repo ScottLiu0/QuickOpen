@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="utf-8"?>
+<PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android">
+    <Preference
+        android:key="test"
+        android:title="打开权限配置"
+        >
+        <intent android:action="android.settings.action.MANAGE_OVERLAY_PERMISSION"
+				android:data="package:cn.imliu.quickopen"
+            ></intent>
+    </Preference>
+    <PreferenceCategory
+        android:title="选择选择触发的动作"
+		android:key="open">
+        <ListPreference
+            android:key="open_action"
+            android:title="触发的动作"
+            android:summary="选择触发的动作"
+            android:entries="@array/open_itsm_title"
+            android:entryValues="@array/open_item_code"
+            android:dialogTitle="选择触发的动作"/>
+    </PreferenceCategory>
+</PreferenceScreen>
