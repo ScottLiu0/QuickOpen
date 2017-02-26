@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android">
     <Preference
-        android:key="test"
+        android:key="open_permission"
         android:title="打开权限配置"
         >
         <intent android:action="android.settings.action.MANAGE_OVERLAY_PERMISSION"
