@@ -1,9 +1,25 @@
 <?xml version="1.0" encoding="utf-8"?>
-<FrameLayout
-	xmlns:android="http://schemas.android.com/apk/res/android"
-	android:id="@+id/activity_main"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
 	android:layout_width="match_parent"
 	android:layout_height="match_parent"
+	android:orientation="vertical"
 	android:background="@android:color/white"
 	>
-</FrameLayout>
+	<FrameLayout
+		android:id="@+id/activity_main"
+		android:layout_width="match_parent"
+		android:layout_height="wrap_content"
+		android:background="@android:color/white"
+		>
+	</FrameLayout>
+	<Button
+		android:layout_width="match_parent"
+		android:layout_height="wrap_content"
+		android:text="切换悬浮窗显示"
+		android:onClick="click"/>
+	<Button
+		android:layout_width="match_parent"
+		android:layout_height="wrap_content"
+		android:text="清除位置存储"
+		android:onClick="click2"/>
+</LinearLayout>

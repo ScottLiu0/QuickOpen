@@ -1,15 +1,17 @@
 package cn.imliu.quickopen;
 
+import android.app.Activity;
+import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
-import android.preference.ListPreference;
+import android.graphics.Point;
 import android.preference.Preference;
-import android.preference.PreferenceCategory;
 import android.preference.PreferenceFragment;
 import android.preference.PreferenceManager;
-import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.text.TextUtils;
+import android.view.View;
+import android.view.WindowManager;
 
 import cn.imliu.quickopen.service.SystemOverlayService;
 import cn.imliu.quickopen.util.Code;
@@ -18,7 +20,7 @@ import cn.imliu.quickopen.util.PreferencesUtils;
 import cn.imliu.quickopen.util.SysUtil;
 import cn.imliu.quickopen.util.ToastUtils;
 
-public class MainActivity extends AppCompatActivity{
+public class MainActivity extends Activity {
 	private final static Logger LOGGER = Logger.getLogger(MainActivity.class);
 
 	private final static String KEY_OPEN = "open_action";
@@ -30,8 +32,6 @@ public class MainActivity extends AppCompatActivity{
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_main);
 		fragment = new PrefFragment( );
-		Bundle bundle = new Bundle();
-		fragment.setArguments(bundle);
 		getFragmentManager().beginTransaction()
 				.replace(R.id.activity_main,fragment)
 				.commit();
@@ -40,6 +40,24 @@ public class MainActivity extends AppCompatActivity{
 		}else{
 			ToastUtils.show("需要开启其他应用的显示权限");
 		}
+	}
+
+	public void click(View view){
+		Class clz = SystemOverlayService.class;
+		if(SysUtil.isServiceRunning(this,clz)){
+			SysUtil.stopService(this,clz);
+		}else{
+			SysUtil.startService(this,clz);
+		}
+	}
+	public void click2(View view){
+		WindowManager wm = (WindowManager) getApplicationContext().getSystemService(Context.WINDOW_SERVICE);
+		Point point = new Point(); wm.getDefaultDisplay().getSize(point);
+		// 以屏幕左上角为原点，设置x、y初始值
+		PreferencesUtils.putInt("x",0);
+		PreferencesUtils.putInt("y",point.y/2);
+		SysUtil.checkAndStopService(this, SystemOverlayService.class);
+		this.start();
 	}
 
 	private void start(){
@@ -67,7 +85,7 @@ public class MainActivity extends AppCompatActivity{
 			Preference pref = manager.findPreference(KEY_OPEN);
 			pref.setOnPreferenceChangeListener( this );
 			SharedPreferences prefs = manager.getSharedPreferences();
-			String lp = prefs.getString(KEY_OPEN,null);
+			String lp = prefs.getString(KEY_OPEN,"1");
 			String title = this.getTitle(lp);
 			if( title != null ){
 				pref.setSummary(title);
@@ -80,6 +98,7 @@ public class MainActivity extends AppCompatActivity{
 					LOGGER.error(e);
 				}
 			}
+			pref.setDefaultValue(lp);
 		}
 		@Override
 		public boolean onPreferenceChange(Preference preference, Object newValue) {
