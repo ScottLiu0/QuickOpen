@@ -1,6 +1,7 @@
 package cn.imliu.quickopen;
 
 import android.app.Activity;
+import android.app.Service;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
@@ -25,13 +26,12 @@ public class MainActivity extends Activity {
 
 	private final static String KEY_OPEN = "open_action";
 	private final static String KEY_PERMISSION = "open_permission";
-	private PrefFragment fragment = null;
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_main);
-		fragment = new PrefFragment( );
+		PrefFragment fragment = new PrefFragment( );
 		getFragmentManager().beginTransaction()
 				.replace(R.id.activity_main,fragment)
 				.commit();
@@ -43,7 +43,7 @@ public class MainActivity extends Activity {
 	}
 
 	public void click(View view){
-		Class clz = SystemOverlayService.class;
+		Class<? extends Service> clz = SystemOverlayService.class;
 		if(SysUtil.isServiceRunning(this,clz)){
 			SysUtil.stopService(this,clz);
 		}else{
@@ -107,12 +107,12 @@ public class MainActivity extends Activity {
 		}
 		private String getTitle(String value){
 			String[] codes = getResources().getStringArray(R.array.open_item_code);
-			if(TextUtils.isEmpty(value) || codes == null || codes.length == 0){
+			if(TextUtils.isEmpty(value) || codes.length == 0){
 				return null;
 			}
 			String[] texts = getResources().getStringArray(R.array.open_itsm_title);
 			int len = codes.length;
-			if( texts== null || texts.length != len ){
+			if( texts.length != len ){
 				return value;
 			}
 			for( int i = 0; i < len; i++){
